@@ -8,6 +8,7 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
+int CheckRow(char row[]);
 
 int main() {
 	srand(time(0));
@@ -24,27 +25,62 @@ int main() {
 
 			if (wantToDeposit) depositedMoney += TakeDeposit(depositOptions);
 		}
-		else depositedMoney += TakeDeposit(depositOptions);
+		else
+		{
+			cout << "Before we get started you will need to deposit some money." << endl;
+			depositedMoney += TakeDeposit(depositOptions);
+		}
 
 		int bet = PerformBet(depositedMoney);
 
+		// Move to function later
+		int correctRows = 0;
 		char matrix[3][3];
 
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				matrix[x][y] = items[rand() % 3];
-				cout << "[ " << matrix[x][y] << " ]";
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				matrix[y][x] = items[rand() % 3];
+				cout << "[ " << matrix[y][x] << " ]";
 			}
 			cout << endl;
+
+			correctRows += CheckRow(matrix[y]);
 		}
 
 		cout << endl;
+		cout << "Correct Rows: " << correctRows << endl;
+
+		// End of "move to function later"
 
 		int wantToPlayAgainOption = AskQuestion("Would you like to play again?");
 		wantToPlayAgain = (wantToPlayAgainOption == 1 ? true : false);
 	} while (wantToPlayAgain);
 
 	return 0;
+}
+
+int CheckRow(char row[]) {
+	
+	int rowLength = sizeof(row) / sizeof(row[0]); // kms
+	cout << "| " << sizeof(row) << " |" << sizeof(row[0]) << " " << sizeof(row[1]) << " " << sizeof(row[2]) << endl; // kms life is hard
+
+	int index = 0;
+	bool isMatch = true;
+
+	do {
+		if (row[index] == row[index + 1]) {
+			cout << "MATCH" << endl;
+			if (index + 1 == rowLength - 1) break;
+		}
+		else
+		{
+			cout << "NO MATCH (BREAK)" << endl;
+			isMatch = false;
+		}
+		index++;
+	} while ((index + 1) < rowLength && isMatch);
+	
+	return isMatch ? 1 : 0;
 }
 
 int PerformBet(int& money) {
@@ -69,7 +105,7 @@ int TakeDeposit(vector<int> options) {
 	vector<string> stringOptions;
 	for (auto option : options) stringOptions.push_back(to_string(option));
 
-	int depositOption = AskQuestion("Before we get started you will need to deposit some money, how much would you like to deposit?", stringOptions) - 1;
+	int depositOption = AskQuestion("How much would you like to deposit?", stringOptions) - 1;
 	int depositedMoney = options[depositOption];
 
 	cout << "You have deposited " << depositedMoney << ", lets continue!" << endl;
