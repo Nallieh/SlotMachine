@@ -8,13 +8,13 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
+int GetPoints();
 
 int main() {
 	srand(time(0));
 
 	int depositedMoney = 0;
 	bool wantToPlayAgain = false;
-	char characters[3] = { 'A', 'O', 'X' };
 	vector<int> depositOptions = { 100, 300, 500 };
 
 	do {
@@ -31,64 +31,53 @@ int main() {
 		}
 
 		int bet = PerformBet(depositedMoney);
-
-		// Move to function later
-
-		/*
-		= { 
-			{ 'X', 'X', 'X', 'X', 'X' },
-			{ 'X', 'X', 'X', 'X', 'X' },
-			{ 'X', 'X', 'X', 'X', 'X' },
-			{ 'X', 'X', 'X', 'X', 'X' },
-			{ 'X', 'X', 'X', 'X', 'X' },
-		};
-		*/
-
-		int points = 0;
-		const int size = 3; // This can't be an even number.
-		char matrix[size][size];
-		char diagonalChecker[2];
-		bool verticalChecker[size] = { 0 };
-		for (int i = 0; i < size; i++) verticalChecker[i] = true;
-
-		bool isLeftDiagonalRow = true;
-		bool isRightDiagonalRow = true;
-
-		for (int row = 0; row < size; row++) {
-			bool isFullRow = true;
-
-			for (int column = 0; column < size; column++) {
-				matrix[row][column] = characters[rand() % 3];
-				cout << "[ " << matrix[row][column] << " ]";
-
-				if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
-				if (matrix[row][column] != matrix[0][column] && verticalChecker[column]) verticalChecker[column] = false;
-				if (row > 0 && isLeftDiagonalRow) isLeftDiagonalRow = (matrix[row][row] == diagonalChecker[0]);
-				if (row > 0 && isRightDiagonalRow) isRightDiagonalRow = (matrix[row][size - row - 1] == diagonalChecker[1]);
-			}
-			cout << endl << endl;
-
-			if (isFullRow) points++;
-			if (row == 0) { 
-				diagonalChecker[0] = matrix[row][0];
-				diagonalChecker[1] = matrix[row][size - 1];
-			}
-		}
-		cout << endl;
-		
-		for (bool columnIsTrue : verticalChecker) if (columnIsTrue) points++;
-		if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
-		else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
-
-		cout << "You got " << points << " points!" << endl;
-
-		// End of "move to function later"
+		int points = GetPoints();
 
 		int wantToPlayAgainOption = AskQuestion("Would you like to play again?");
 		wantToPlayAgain = (wantToPlayAgainOption == 1 ? true : false);
 	} while (wantToPlayAgain);
 
 	return 0;
+}
+
+int GetPoints() {
+	const int size = 3; // This can't be an even number.
+	int points = 0;
+
+	char matrix[size][size], diagonalChecker[2];
+	char characters[3] = { 'A', 'O', 'X' };
+
+	bool isLeftDiagonalRow = true, isRightDiagonalRow = true;
+	bool verticalChecker[size] = { 0 };
+	for (int index = 0; index < size; index++) verticalChecker[index] = true;
+
+	for (int row = 0; row < size; row++) {
+		bool isFullRow = true;
+
+		for (int column = 0; column < size; column++) {
+			matrix[row][column] = characters[rand() % 3];
+			cout << "[ " << matrix[row][column] << " ]";
+
+			if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
+			if (matrix[row][column] != matrix[0][column] && verticalChecker[column]) verticalChecker[column] = false;
+			if (row > 0 && isLeftDiagonalRow) isLeftDiagonalRow = (matrix[row][row] == diagonalChecker[0]);
+			if (row > 0 && isRightDiagonalRow) isRightDiagonalRow = (matrix[row][size - row - 1] == diagonalChecker[1]);
+		}
+		cout << endl << endl;
+
+		if (isFullRow) points++;
+		if (row == 0) {
+			diagonalChecker[0] = matrix[row][0];
+			diagonalChecker[1] = matrix[row][size - 1];
+		}
+	}
+	cout << endl;
+
+	for (bool columnIsTrue : verticalChecker) if (columnIsTrue) points++;
+	if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
+	else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
+
+	return points;
 }
 
 int PerformBet(int& money) {
