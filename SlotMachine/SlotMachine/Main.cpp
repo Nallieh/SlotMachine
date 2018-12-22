@@ -36,7 +36,11 @@ int main() {
 		// Move to function later
 		int points = 0;
 		const int size = 3; // This can't be an even number.
-		char matrix[size][size];
+		char matrix[size][size] = { 
+			{ 'X', 'A', 'X' },
+			{ 'A', 'X', 'X' },
+			{ 'X', 'O', 'X' }
+		};
 		char diagonalChecker[2];
 
 		bool isLeftDiagonalRow = true;
@@ -46,17 +50,15 @@ int main() {
 			bool isFullRow = true;
 
 			for (int column = 0; column < size; column++) {
-				matrix[row][column] = characters[rand() % 3];
+				// matrix[row][column] = characters[rand() % 3];
+				cout << "[ " << matrix[row][column] << " ]";
+				// cout << "[ " << row << "," << column << " ]";
 
 				if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
-				if (row > 0) {
-					if (matrix[row][row] != diagonalChecker[0]) isLeftDiagonalRow = false;
-					if (matrix[row][size - row - 1] != diagonalChecker[1]) isRightDiagonalRow = false;
-				}
-
-				cout << "[ " << matrix[row][column] << " ]";
+				if (row > 0 && isLeftDiagonalRow) isLeftDiagonalRow = (matrix[row][row] == diagonalChecker[0]);
+				if (row > 0 && isRightDiagonalRow) isRightDiagonalRow = (matrix[row][size - row - 1] == diagonalChecker[1]);
 			}
-			cout << endl;
+			cout << endl << endl;
 
 			if (isFullRow) points++;
 			if (row == 0) { 
@@ -65,7 +67,7 @@ int main() {
 			}
 		}
 		cout << endl;
-		cout << (isLeftDiagonalRow && isRightDiagonalRow ? "Double diagonal row found!" : (isLeftDiagonalRow ? "Left diagonal row found" : (isRightDiagonalRow ? "Right diagonal row found" : "No diagonal row found!"))) << endl;
+	    cout << (isLeftDiagonalRow && isRightDiagonalRow ? "Double diagonal row found!" : (isLeftDiagonalRow ? "Left diagonal row found" : (isRightDiagonalRow ? "Right diagonal row found" : "No diagonal row found!"))) << endl;
 
 		cout << "You got " << points << " points!" << endl;
 
