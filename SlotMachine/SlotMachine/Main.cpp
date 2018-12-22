@@ -8,7 +8,7 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
-int CheckRow(char row[]);
+int CheckRow(char row[], int length);
 
 int main() {
 	srand(time(0));
@@ -45,7 +45,7 @@ int main() {
 			}
 			cout << endl;
 
-			correctRows += CheckRow(matrix[row]);
+			correctRows += CheckRow(matrix[row], size);
 		}
 
 		cout << endl;
@@ -60,18 +60,14 @@ int main() {
 	return 0;
 }
 
-int CheckRow(char row[]) {
-	
-	int rowLength = sizeof(row) / sizeof(row[0]); // kms
-	cout << "| " << sizeof(row) << " |" << sizeof(row[0]) << " " << sizeof(row[1]) << " " << sizeof(row[2]) << endl; // kms life is hard
-
+int CheckRow(char row[], int length) {
 	int index = 0;
 	bool isMatch = true;
 
 	do {
 		if (row[index] == row[index + 1]) {
 			cout << "MATCH" << endl;
-			if (index + 1 == rowLength - 1) break;
+			if (index + 1 == length - 1) break;
 		}
 		else
 		{
@@ -79,7 +75,7 @@ int CheckRow(char row[]) {
 			isMatch = false;
 		}
 		index++;
-	} while ((index + 1) < rowLength && isMatch);
+	} while ((index + 1) < length && isMatch);
 	
 	return isMatch ? 1 : 0;
 }
