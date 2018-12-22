@@ -8,7 +8,6 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
-int CheckRow(char row[], int length);
 
 int main() {
 	srand(time(0));
@@ -34,14 +33,23 @@ int main() {
 		int bet = PerformBet(depositedMoney);
 
 		// Move to function later
+
+		/*
+		= { 
+			{ 'X', 'X', 'X', 'X', 'X' },
+			{ 'X', 'X', 'X', 'X', 'X' },
+			{ 'X', 'X', 'X', 'X', 'X' },
+			{ 'X', 'X', 'X', 'X', 'X' },
+			{ 'X', 'X', 'X', 'X', 'X' },
+		};
+		*/
+
 		int points = 0;
 		const int size = 3; // This can't be an even number.
-		char matrix[size][size] = { 
-			{ 'X', 'A', 'X' },
-			{ 'A', 'X', 'X' },
-			{ 'X', 'O', 'X' }
-		};
+		char matrix[size][size];
 		char diagonalChecker[2];
+		bool verticalChecker[size] = { 0 };
+		for (int i = 0; i < size; i++) verticalChecker[i] = true;
 
 		bool isLeftDiagonalRow = true;
 		bool isRightDiagonalRow = true;
@@ -50,11 +58,11 @@ int main() {
 			bool isFullRow = true;
 
 			for (int column = 0; column < size; column++) {
-				// matrix[row][column] = characters[rand() % 3];
+				matrix[row][column] = characters[rand() % 3];
 				cout << "[ " << matrix[row][column] << " ]";
-				// cout << "[ " << row << "," << column << " ]";
 
 				if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
+				if (matrix[row][column] != matrix[0][column] && verticalChecker[column]) verticalChecker[column] = false;
 				if (row > 0 && isLeftDiagonalRow) isLeftDiagonalRow = (matrix[row][row] == diagonalChecker[0]);
 				if (row > 0 && isRightDiagonalRow) isRightDiagonalRow = (matrix[row][size - row - 1] == diagonalChecker[1]);
 			}
@@ -67,7 +75,10 @@ int main() {
 			}
 		}
 		cout << endl;
-	    cout << (isLeftDiagonalRow && isRightDiagonalRow ? "Double diagonal row found!" : (isLeftDiagonalRow ? "Left diagonal row found" : (isRightDiagonalRow ? "Right diagonal row found" : "No diagonal row found!"))) << endl;
+		
+		for (bool columnIsTrue : verticalChecker) if (columnIsTrue) points++;
+		if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
+		else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
 
 		cout << "You got " << points << " points!" << endl;
 
