@@ -35,16 +35,17 @@ int main() {
 
 		// Move to function later
 		int correctRows = 0;
-		char matrix[3][3];
+		const int size = 3;
+		char matrix[size][size];
 
-		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				matrix[y][x] = items[rand() % 3];
-				cout << "[ " << matrix[y][x] << " ]";
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				matrix[row][column] = items[rand() % 3];
+				cout << "[ " << matrix[row][column] << " ]";
 			}
 			cout << endl;
 
-			correctRows += CheckRow(matrix[y]);
+			correctRows += CheckRow(matrix[row]);
 		}
 
 		cout << endl;
