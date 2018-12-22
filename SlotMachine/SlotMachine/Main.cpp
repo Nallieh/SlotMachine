@@ -15,7 +15,7 @@ int main() {
 
 	int depositedMoney = 0;
 	bool wantToPlayAgain = false;
-	char items[3] = { 'A', 'O', 'X' };
+	char characters[3] = { 'A', 'O', 'X' };
 	vector<int> depositOptions = { 100, 300, 500 };
 
 	do {
@@ -34,22 +34,40 @@ int main() {
 		int bet = PerformBet(depositedMoney);
 
 		// Move to function later
-		int correctRows = 0;
-		const int size = 3;
+		int points = 0;
+		const int size = 3; // This can't be an even number.
 		char matrix[size][size];
+		char diagonalChecker[2];
+
+		bool isLeftDiagonalRow = true;
+		bool isRightDiagonalRow = true;
 
 		for (int row = 0; row < size; row++) {
+			bool isFullRow = true;
+
 			for (int column = 0; column < size; column++) {
-				matrix[row][column] = items[rand() % 3];
+				matrix[row][column] = characters[rand() % 3];
+
+				if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
+				if (row > 0) {
+					if (matrix[row][row] != diagonalChecker[0]) isLeftDiagonalRow = false;
+					if (matrix[row][size - row - 1] != diagonalChecker[1]) isRightDiagonalRow = false;
+				}
+
 				cout << "[ " << matrix[row][column] << " ]";
 			}
 			cout << endl;
 
-			correctRows += CheckRow(matrix[row], size);
+			if (isFullRow) points++;
+			if (row == 0) { 
+				diagonalChecker[0] = matrix[row][0];
+				diagonalChecker[1] = matrix[row][size - 1];
+			}
 		}
-
 		cout << endl;
-		cout << "Correct Rows: " << correctRows << endl;
+		cout << (isLeftDiagonalRow && isRightDiagonalRow ? "Double diagonal row found!" : (isLeftDiagonalRow ? "Left diagonal row found" : (isRightDiagonalRow ? "Right diagonal row found" : "No diagonal row found!"))) << endl;
+
+		cout << "You got " << points << " points!" << endl;
 
 		// End of "move to function later"
 
@@ -58,26 +76,6 @@ int main() {
 	} while (wantToPlayAgain);
 
 	return 0;
-}
-
-int CheckRow(char row[], int length) {
-	int index = 0;
-	bool isMatch = true;
-
-	do {
-		if (row[index] == row[index + 1]) {
-			cout << "MATCH" << endl;
-			if (index + 1 == length - 1) break;
-		}
-		else
-		{
-			cout << "NO MATCH (BREAK)" << endl;
-			isMatch = false;
-		}
-		index++;
-	} while ((index + 1) < length && isMatch);
-	
-	return isMatch ? 1 : 0;
 }
 
 int PerformBet(int& money) {
