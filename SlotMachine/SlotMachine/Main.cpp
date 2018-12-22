@@ -8,6 +8,7 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
+int ReturnWinnings(int bet, int points);
 int GetPoints();
 
 int main() {
@@ -32,12 +33,24 @@ int main() {
 
 		int bet = PerformBet(depositedMoney);
 		int points = GetPoints();
+		
+		depositedMoney += ReturnWinnings(bet, points);
+		cout << "Your new account balance is: " << depositedMoney << endl;
 
 		int wantToPlayAgainOption = AskQuestion("Would you like to play again?");
 		wantToPlayAgain = (wantToPlayAgainOption == 1 ? true : false);
 	} while (wantToPlayAgain);
 
 	return 0;
+}
+
+int ReturnWinnings(int bet, int points) {
+	int moneyWon = (points > 0 ? bet *= (points + 1) : bet * points);
+	
+	if (moneyWon == 0) cout << "You have lost [" << bet << "] with " << " correct rows!" << endl;
+	else cout << "You have won [" << moneyWon << "] with " << points << " correct rows!" << endl;
+
+	return moneyWon;
 }
 
 int GetPoints() {
@@ -76,6 +89,8 @@ int GetPoints() {
 	for (bool columnIsTrue : verticalChecker) if (columnIsTrue) points++;
 	if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
 	else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
+
+	cout << "You have [" << points << "] completed rows." << endl;
 
 	return points;
 }
