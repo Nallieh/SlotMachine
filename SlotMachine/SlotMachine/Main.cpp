@@ -8,8 +8,8 @@ using namespace std;
 int AskQuestion(string message, vector<string> options = { "Yes", "No" });
 int TakeDeposit(vector<int> options);
 int PerformBet(int& money);
-int ReturnWinnings(int bet, int points);
-int GetPoints();
+int ReturnWinnings(int bet, int points, int size);
+int PlayGame(int bet);
 
 int main() {
     srand(time(0));
@@ -32,9 +32,8 @@ int main() {
         }
 
         int bet = PerformBet(depositedMoney);
-        int points = GetPoints();
+        depositedMoney += PlayGame(bet);
 
-        depositedMoney += ReturnWinnings(bet, points);
         cout << "Your new account balance is: " << depositedMoney << endl;
 
         int wantToPlayAgainOption = AskQuestion("Would you like to play again?");
@@ -45,20 +44,25 @@ int main() {
 }
 
 // Check SCIO for requirements about winnings?
-int ReturnWinnings(int bet, int points) {
-    int moneyWon = (points > 0 ? bet *= (points + 1) : bet * points);
+int ReturnWinnings(int bet, int points, int size) {
+    int multiplier = 0;
 
+    if (points == size * 2 + 2) multiplier = (size == 3 ? 10 : 10 + size);
+    else if (points > 0 && points < 5) multiplier = points + 1;
+    else if (points >= 5 && points < size * 2 + 2) multiplier = points + 2;
+
+    int moneyWon = bet * multiplier;
     if (moneyWon == 0) cout << "You have lost [" << bet << "] with " << " correct rows!" << endl;
     else cout << "You have won [" << moneyWon << "] with " << points << " correct rows!" << endl;
 
     return moneyWon;
 }
 
-int GetPoints() {
+int PlayGame(int bet) {
     const int size = 3; // This can't be an even number.
     int points = 0;
 
-    char matrix[size][size], diagonalChecker[2];
+    char matrix[size][size];
     char characters[3] = { 'A', 'O', 'X' };
 
     bool isLeftDiagonalRow = true, isRightDiagonalRow = true;
@@ -66,24 +70,20 @@ int GetPoints() {
     for (int index = 0; index < size; index++) verticalChecker[index] = true;
 
     for (int row = 0; row < size; row++) {
-        bool isFullRow = true;
+        bool isHorizontalRow = true;
 
         for (int column = 0; column < size; column++) {
             matrix[row][column] = characters[rand() % 3];
             cout << "[ " << matrix[row][column] << " ]";
 
-            if (matrix[row][column] != matrix[row][0] && isFullRow) isFullRow = false;
+            if (matrix[row][column] != matrix[row][0] && isHorizontalRow) isHorizontalRow = false;
             if (matrix[row][column] != matrix[0][column] && verticalChecker[column]) verticalChecker[column] = false;
-            if (row > 0 && isLeftDiagonalRow) isLeftDiagonalRow = (matrix[row][row] == diagonalChecker[0]);
-            if (row > 0 && isRightDiagonalRow) isRightDiagonalRow = (matrix[row][size - row - 1] == diagonalChecker[1]);
+            if (isLeftDiagonalRow && row > 0 && column == row) isLeftDiagonalRow = (matrix[row][row] == matrix[0][0]);
+            if (isRightDiagonalRow && row > 0 && column == size - row - 1) isRightDiagonalRow = (matrix[row][size - row - 1] == matrix[0][size - 1]);
         }
         cout << endl << endl;
 
-        if (isFullRow) points++;
-        if (row == 0) {
-            diagonalChecker[0] = matrix[row][0];
-            diagonalChecker[1] = matrix[row][size - 1];
-        }
+        if (isHorizontalRow) points++;
     }
     cout << endl;
 
@@ -93,7 +93,7 @@ int GetPoints() {
 
     cout << "You have [" << points << "] completed rows." << endl;
 
-    return points;
+    return ReturnWinnings(bet, points, size);
 }
 
 int PerformBet(int& money) {
