@@ -1,4 +1,4 @@
-Matrix templates for testing, remember to replace the size variable in the code with the corresponding size form the matrix below.
+Matrix templates for testing, remember to replace the size variable in the code with the corresponding size from the matrix below.
 
 3x3 Matrix
 
