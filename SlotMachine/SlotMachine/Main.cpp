@@ -14,27 +14,27 @@ int PlayGame(int bet);
 int main() {
     srand(time(0));
 
-    int depositedMoney = 0;
+    int gameAccount = 0;
     bool wantToPlayAgain = false;
     vector<int> depositOptions = { 100, 300, 500 };
 
     do {
-        if (depositedMoney > 0) {
+        if (gameAccount > 0) {
             int wantToDepositOption = AskQuestion("You have enough money on your account to make a bet, would you still like to make a deposit?");
             bool wantToDeposit = (wantToDepositOption == 1 ? true : false);
 
-            if (wantToDeposit) depositedMoney += TakeDeposit(depositOptions);
+            if (wantToDeposit) gameAccount += TakeDeposit(depositOptions);
         }
         else
         {
             cout << "Before we get started you will need to deposit some money." << endl;
-            depositedMoney += TakeDeposit(depositOptions);
+            gameAccount += TakeDeposit(depositOptions);
         }
 
-        int bet = PerformBet(depositedMoney);
-        depositedMoney += PlayGame(bet);
+        int bet = PerformBet(gameAccount);
+        gameAccount += PlayGame(bet);
 
-        cout << "Your new account balance is: " << depositedMoney << endl;
+        cout << "Your new account balance is: " << gameAccount << endl;
 
         int wantToPlayAgainOption = AskQuestion("Would you like to play again?");
         wantToPlayAgain = (wantToPlayAgainOption == 1 ? true : false);
@@ -52,14 +52,14 @@ int ReturnWinnings(int bet, int points, int size) {
     else if (points >= 5 && points < size * 2 + 2) multiplier = points + 2;
 
     int moneyWon = bet * multiplier;
-    if (moneyWon == 0) cout << "You have lost [" << bet << "] with " << " correct rows!" << endl;
+    if (moneyWon == 0) cout << "You have lost [" << bet << "] with " << points << " correct rows!" << endl;
     else cout << "You have won [" << moneyWon << "] with " << points << " correct rows!" << endl;
 
     return moneyWon;
 }
 
 int PlayGame(int bet) {
-    const int size = 3; // This can't be an even number.
+    const int size = 3;
     int points = 0;
 
     char matrix[size][size];
