@@ -1,0 +1,33 @@
+Matrix templates for testing, remember to replace the size variable in the code with the corresponding size form the matrix below.
+
+3x3 Matrix
+
+char matrix[size][size] = {
+	{ 'A', 'A', 'A' },
+	{ 'A', 'A', 'A' },
+	{ 'A', 'A', 'A' }
+}
+
+5x5 Matrix
+
+char matrix[size][size] = {
+	{ 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A' }
+}
+
+9x9 Matrix
+
+char matrix[size][size] = {
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' },
+	{ 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A' }
+}
