@@ -66,8 +66,8 @@ int PlayGame(int bet) {
     char characters[3] = { 'A', 'O', 'X' };
 
     bool isLeftDiagonalRow = true, isRightDiagonalRow = true;
-    bool verticalChecker[size] = { 0 };
-    for (int index = 0; index < size; index++) verticalChecker[index] = true;
+    bool isVerticalRow[size] = { 0 };
+    for (int index = 0; index < size; index++) isVerticalRow[index] = true;
 
     for (int row = 0; row < size; row++) {
         bool isHorizontalRow = true;
@@ -76,8 +76,8 @@ int PlayGame(int bet) {
             matrix[row][column] = characters[rand() % 3];
             cout << "[ " << matrix[row][column] << " ]";
 
-            if (matrix[row][column] != matrix[row][0] && isHorizontalRow) isHorizontalRow = false;
-            if (matrix[row][column] != matrix[0][column] && verticalChecker[column]) verticalChecker[column] = false;
+            if (isHorizontalRow && matrix[row][column] != matrix[row][0]) isHorizontalRow = false;
+            if (isVerticalRow[column] && matrix[row][column] != matrix[0][column]) isVerticalRow[column] = false;
             if (isLeftDiagonalRow && row > 0 && column == row) isLeftDiagonalRow = (matrix[row][row] == matrix[0][0]);
             if (isRightDiagonalRow && row > 0 && column == size - row - 1) isRightDiagonalRow = (matrix[row][size - row - 1] == matrix[0][size - 1]);
         }
@@ -87,7 +87,7 @@ int PlayGame(int bet) {
     }
     cout << endl;
 
-    for (bool columnIsTrue : verticalChecker) if (columnIsTrue) points++;
+    for (bool columnIsTrue : isHorizontalRow) if (columnIsTrue) points++;
     if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
     else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
 
