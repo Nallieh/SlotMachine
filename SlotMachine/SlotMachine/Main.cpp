@@ -87,7 +87,7 @@ int PlayGame(int bet) {
     }
     cout << endl;
 
-    for (bool columnIsTrue : isHorizontalRow) if (columnIsTrue) points++;
+    for (bool columnIsTrue : isVerticalRow) if (columnIsTrue) points++;
     if (isLeftDiagonalRow && isRightDiagonalRow) points += 2;
     else if (isLeftDiagonalRow || isRightDiagonalRow) points++;
 
