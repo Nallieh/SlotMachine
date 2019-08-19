@@ -1,2 +1,2 @@
 # SlotMachine
-A SlotMachine "game" written in C++
+A SlotMachine game written in C++ as a Console Application.
