@@ -56,7 +56,7 @@ int ReturnWinnings(int bet, int points, int size) {
     // Initialize variable
     int multiplier = 0;
 
-    // If conditions are true, assing new value to multiplier
+    // If conditions are true, assign new value to multiplier
     if (points == size * 2 + 2) multiplier = (size == 3 ? 10 : 10 + size);
     else if (points > 0 && points < 5) multiplier = points + 1;
     else if (points >= 5 && points < size * 2 + 2) multiplier = points + 2;
